@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+  <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.calculator {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+}
+
+#display {
+    width: 100%;
+    padding: 10px;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+button {
+    padding: 15px;
+    font-size: 18px;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+  </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" readonly>
+        <div class="buttons">
+            <!-- Buttons will be dynamically generated using JavaScript -->
+        </div>
+    </div>
+    <script>
+        // script.js
+const buttonsContainer = document.querySelector('.buttons');
+const display = document.getElementById('display');
+
+const operators = ['+', '-', '*', '/'];
+
+// Create number and operator buttons
+for (let i = 1; i <= 9; i++) {
+    createButton(i.toString());
+}
+
+for (const operator of operators) {
+    createButton(operator);
+}
+
+createButton('0');
+createButton('.');
+createButton('C'); // Clear button
+createButton('='); // Calculate button
+
+function createButton(text) {
+    const button = document.createElement('button');
+    button.textContent = text;
+    button.addEventListener('click', () => handleButtonClick(text));
+    buttonsContainer.appendChild(button);
+}
+
+let currentInput = '';
+let currentOperator = '';
+let currentResult = '';
+
+function handleButtonClick(value) {
+    if (value === '=' && currentInput !== '') {
+        if (currentOperator && currentResult) {
+            currentResult = eval(`${currentResult} ${currentOperator} ${currentInput}`);
+            display.value = currentResult;
+            currentInput = '';
+            currentOperator = '';
+        }
+    } else if (value === 'C') {
+        display.value = '';
+        currentInput = '';
+        currentOperator = '';
+        currentResult = '';
+    } else if (operators.includes(value)) {
+        if (currentInput !== '') {
+            if (currentOperator && currentResult) {
+                currentResult = eval(`${currentResult} ${currentOperator} ${currentInput}`);
+            } else {
+                currentResult = currentInput;
+            }
+            currentOperator = value;
+            display.value = currentResult;
+            currentInput = '';
+        }
+    } else {
+        currentInput += value;
+        display.value = currentInput;
+    }
+}
+
+    </script>
+</body>
+</html>
